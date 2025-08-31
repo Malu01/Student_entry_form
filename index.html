@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Student Form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+      }
+      form {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      input,
+      select {
+        margin: 8px 0;
+        padding: 8px;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        background-color: #0db5ff;
+        color: white;
+        padding: 10px;
+        width: 100%;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      table {
+        width: 90%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid #333;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #0db5ff;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Student Form</h2>
+    <form id="studentForm">
+      <input type="text" id="name" placeholder="Enter Name" required />
+      <input type="number" id="age" placeholder="Enter Age" required />
+      <select id="course" required>
+        <option value="">Select Course</option>
+        <option value="HTML">HTML</option>
+        <option value="CSS">CSS</option>
+        <option value="JavaScript">JavaScript</option>
+        <option value="C++">C++</option>
+      </select>
+      <select id="gender" required>
+        <option value="">Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+      <input type="email" id="email" placeholder="Enter Email" required />
+      <button type="submit">Save</button>
+    </form>
+
+    <table id="dataTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Course</th>
+          <th>Gender</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <script>
+      const form = document.getElementById("studentForm");
+      const tableBody = document.querySelector("#dataTable tbody");
+
+      // ✅ Load data when page opens
+      window.onload = function () {
+        let students = JSON.parse(localStorage.getItem("students")) || [];
+        students.forEach(addRow);
+      };
+
+      // ✅ Save data
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        let student = {
+          name: document.getElementById("name").value,
+          age: document.getElementById("age").value,
+          course: document.getElementById("course").value,
+          gender: document.getElementById("gender").value,
+          email: document.getElementById("email").value,
+        };
+
+        // Get old data, add new student, then save
+        let students = JSON.parse(localStorage.getItem("students")) || [];
+        students.push(student);
+        localStorage.setItem("students", JSON.stringify(students));
+
+        addRow(student); // add to table
+        form.reset();
+      });
+
+      // ✅ Add row function
+      function addRow(student) {
+        let row = tableBody.insertRow();
+        row.insertCell(0).innerText = student.name;
+        row.insertCell(1).innerText = student.age;
+        row.insertCell(2).innerText = student.course;
+        row.insertCell(3).innerText = student.gender;
+        row.insertCell(4).innerText = student.email;
+      }
+    </script>
+  </body>
+</html>
